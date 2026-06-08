@@ -1,0 +1,38 @@
+package edu_gaj.pasir_gaj_weronika.controller;
+
+import edu_gaj.pasir_gaj_weronika.dto.GroupDTO;
+import edu_gaj.pasir_gaj_weronika.dto.GroupResponseDTO;
+import edu_gaj.pasir_gaj_weronika.service.GroupService;
+import jakarta.validation.Valid;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
+
+import java.util.List;
+
+@Controller
+public class GroupGraphQLController {
+
+    private final GroupService groupService;
+
+    public GroupGraphQLController(GroupService groupService) {
+        this.groupService = groupService;
+    }
+
+    @QueryMapping
+    public List<GroupResponseDTO> myGroups() {
+        return groupService.getMyGroups();
+    }
+
+    @MutationMapping
+    public GroupResponseDTO createGroup(@Valid @Argument GroupDTO groupDTO) {
+        return groupService.createGroup(groupDTO);
+    }
+
+    @MutationMapping
+    public Boolean deleteGroup(@Argument Long id) {
+        groupService.deleteGroup(id);
+        return true;
+    }
+}

@@ -1,0 +1,48 @@
+# ======================
+# ALL
+# ======================
+
+.DS_Store
+*.tmp
+*.log
+
+# ======================
+# BACKEND
+# ======================
+
+backend/target/
+backend/.idea/
+backend/*.iml
+
+backend/.env
+
+# Maven
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# ======================
+# FRONTEND
+# ======================
+
+frontend/node_modules/
+frontend/dist/
+
+# ======================
+# ENV
+# ======================
+
+.env
+.env.local
+.env.*.local
+
+# ======================
+# IDE
+# ======================
+
+.idea/
+.vscode/
+
+# ======================
+# DOCKER
+# ======================
+
+docker-compose.override.yml

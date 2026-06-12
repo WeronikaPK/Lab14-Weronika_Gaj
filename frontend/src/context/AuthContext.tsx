@@ -76,15 +76,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const login = useCallback((token: string) => {
+    const jwtPattern = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+
+    if (!jwtPattern.test(token)) {
+      console.error("Nieprawidlowy format tokena");
+      return;
+    }
+
     const parsedUser = parseJwt(token);
     if (!parsedUser) {
       console.error("Nie udało się sparsować użytkownika z tokena");
       return;
     }
+
     localStorage.setItem("accessToken", token);
     setIsAuthenticated(true);
     setUser(parsedUser);
   }, []);
+
 
   useEffect(() => {
     const interval = setInterval(() => {

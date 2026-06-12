@@ -13,16 +13,13 @@ interface GroupNotification {
   message: string;
 }
 
+const isValidToken = (token: string) => /^[A-Za-z0-9._-]+$/.test(token);
+
 const getWebSocketUrl = (token: string) => {
-  const safeTokenPattern = /^[A-Za-z0-9._-]+$/;
-
-  if (!safeTokenPattern.test(token)) {
-    throw new Error("Invalid token format");
-  }
-
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
   return `${protocol}://localhost:8080/ws/group-notifications?token=${encodeURIComponent(token)}`;
 };
+
 const GroupNotificationsListener = () => {
   const { isAuthenticated } = useAuth();
 
@@ -30,9 +27,13 @@ const GroupNotificationsListener = () => {
     if (!isAuthenticated) return;
 
     const token = localStorage.getItem("accessToken");
-    if (!token) return;
 
-    const socket = new WebSocket(getWebSocketUrl(token));
+    if (!token || !isValidToken(token)) {
+      return;
+    }
+
+    const socketUrl = getWebSocketUrl(token);
+    const socket = new WebSocket(socketUrl);
 
     socket.onmessage = (event) => {
       try {

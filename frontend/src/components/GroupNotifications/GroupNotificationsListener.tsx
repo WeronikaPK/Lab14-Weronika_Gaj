@@ -14,10 +14,15 @@ interface GroupNotification {
 }
 
 const getWebSocketUrl = (token: string) => {
+  const safeTokenPattern = /^[A-Za-z0-9._-]+$/;
+
+  if (!safeTokenPattern.test(token)) {
+    throw new Error("Invalid token format");
+  }
+
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
   return `${protocol}://localhost:8080/ws/group-notifications?token=${encodeURIComponent(token)}`;
 };
-
 const GroupNotificationsListener = () => {
   const { isAuthenticated } = useAuth();
 

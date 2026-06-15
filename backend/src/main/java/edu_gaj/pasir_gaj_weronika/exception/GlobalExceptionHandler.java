@@ -13,13 +13,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String ERROR = "error";
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyExists(UserAlreadyExistsException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
+        error.put(ERROR, ex.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
 
@@ -31,17 +34,18 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
+        error.put(ERROR, ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUsernameNotFound(UsernameNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
+        error.put(ERROR, ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 }
